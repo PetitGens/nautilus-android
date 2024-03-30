@@ -8,5 +8,7 @@ data class FakeDive(
     val location: String = "Un super lieu",
     val nbSpots: Int = 4,
     val nbTakenSpots: Int = 1,
-    val dive: Unit? = null
+    val dive: Unit? = null,
+    var isRegistered: Boolean = false,
+    val participants: MutableList<String> = mutableListOf()
 )

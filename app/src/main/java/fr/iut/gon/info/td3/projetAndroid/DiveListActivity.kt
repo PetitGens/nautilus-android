@@ -30,7 +30,7 @@ class DiveListActivity : AppCompatActivity() {
 
 
         val fakeDiveList = listOf(
-            FakeDive(date="2024-04-04", hour="9h", depth=50, location="Astan", nbTakenSpots=5, nbSpots=15),
+            FakeDive(date="MAUVAISE ACTIVITÉ", hour="9h", depth=50, location="Astan", nbTakenSpots=5, nbSpots=15),
             FakeDive(date="2024-04-12", hour="18h", depth=20, location="L'ile Verte", nbTakenSpots=1, nbSpots=10),
             FakeDive(date="2024-05-22", hour="9h", depth=40, location="Les Trepieds", nbTakenSpots=2, nbSpots=2),
             FakeDive(date="2026-01-01", hour="18h", depth=20, location="L'lle Verte", nbTakenSpots=1, nbSpots=4),

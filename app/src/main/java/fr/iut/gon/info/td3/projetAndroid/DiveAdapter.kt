@@ -4,6 +4,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.compose.ui.graphics.Color
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 
 class DiveAdapter(private val dives: List<FakeDive>) : RecyclerView.Adapter<DiveAdapter.ViewHolder>() {
@@ -13,6 +15,7 @@ class DiveAdapter(private val dives: List<FakeDive>) : RecyclerView.Adapter<Dive
         val diveHourLocation: TextView = itemView.findViewById(R.id.dive_hour_location)
         val diveDepth: TextView = itemView.findViewById(R.id.dive_depth)
         val diveSpots: TextView = itemView.findViewById(R.id.dive_spots)
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -30,5 +33,21 @@ class DiveAdapter(private val dives: List<FakeDive>) : RecyclerView.Adapter<Dive
         holder.diveHourLocation.text = "${dive.hour} à \"${dive.location}\""
         holder.diveDepth.text = "${dive.depth}m de profondeur"
         holder.diveSpots.text = "${dive.nbTakenSpots}/${dive.nbSpots}"
+
+        if (dive.isRegistered) {
+            val backgroundColor = ContextCompat.getColor(holder.itemView.context, R.color.purple_200)
+            holder.itemView.setBackgroundColor(backgroundColor)
+        }
+        else {
+            val backgroundColor = ContextCompat.getColor(holder.itemView.context, android.R.color.transparent)
+            holder.itemView.setBackgroundColor(backgroundColor)
+        }
+
+
+
+
+        holder.itemView.setOnClickListener {
+
+        }
     }
 }

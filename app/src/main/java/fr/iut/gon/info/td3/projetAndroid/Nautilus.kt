@@ -45,14 +45,15 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 @Composable
 fun FakeDiveList()
 {
+    /*
     val fakeDiveList = listOf(
         FakeDive(date="2024-04-04", hour="9h", depth=50, location="Astan", nbTakenSpots=5, nbSpots=15),
         FakeDive(date="2024-04-12", hour="18h", depth=20, location="L'ile Verte", nbTakenSpots=1, nbSpots=10),
-        FakeDive(date="2024-05-22", hour="9h", depth=40, location="Les Trepieds", nbTakenSpots=2, nbSpots=2),
+        FakeDive(date="2024-05-22", hour="9h", depth=40, location="Les Trepieds", nbTakenSpots=2, nbSpots=2, isRegistered = true),
         FakeDive(date="2026-01-01", hour="18h", depth=20, location="L'lle Verte", nbTakenSpots=1, nbSpots=4),
-        FakeDive(date="2026-12-30", hour="18h", depth=20, location="L'ile Verte", nbTakenSpots=1, nbSpots=12),
-        FakeDive(date="2030-12-26", hour="18h", depth=20, location="Lille Verte", nbTakenSpots=1, nbSpots=4)
-    )
+        FakeDive(date="2026-12-30", hour="18h", depth=20, location="L'ile Verte", nbTakenSpots=1, nbSpots=12, isRegistered = true),
+        FakeDive(date="2030-12-26", hour="18h", depth=20, location="Lille Verte", nbTakenSpots=1, nbSpots=4, isRegistered = true)
+    )*/
     val randomDives = mutableListOf<FakeDive>()
 
     for (i in 1..100) {
@@ -63,16 +64,15 @@ fun FakeDiveList()
 
         val hour = if (Random.nextBoolean()) "9h" else "18h"
         val depth = Random.nextInt(10, 51)
-        val location = listOf("Astan", "L'ile Verte", "Les Trepieds", "Lille Verte").random()
+        val location = listOf("Astan", "L'ile Verte", "Les Trepieds").random()
         val nbTakenSpots = Random.nextInt(1, 11)
         val nbSpots = Random.nextInt(nbTakenSpots, 21)
+        val isRegistered = Random.nextInt(1,5) == 1
 
-        randomDives.add(FakeDive(date=date, hour=hour, depth=depth, location=location, nbTakenSpots=nbTakenSpots, nbSpots=nbSpots))
+        randomDives.add(FakeDive(date=date, hour=hour, depth=depth, location=location, nbTakenSpots=nbTakenSpots, nbSpots=nbSpots, isRegistered = isRegistered))
     }
 
-    val combinedList = fakeDiveList + randomDives
-
-    DiveListView(dives = combinedList)
+    DiveListView(dives = randomDives)
 }
 
 
