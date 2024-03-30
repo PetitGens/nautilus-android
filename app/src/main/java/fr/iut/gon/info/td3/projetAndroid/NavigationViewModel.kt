@@ -10,6 +10,6 @@ class NavigationViewModel : ViewModel() {
     }
 
     init {
-        currentPage.value = NautilusPage.DIVES_LIST
+        currentPage.value = NautilusPage.LOGIN
     }
 }

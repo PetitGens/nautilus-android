@@ -7,6 +7,7 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
@@ -17,12 +18,14 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.google.android.material.internal.NavigationMenu
 import fr.iut.gon.info.td3.projetAndroid.ui.theme.ProjetAndroidTheme
+import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
 class Nautilus : ComponentActivity() {
     private val navigationViewModel : NavigationViewModel by viewModels()
@@ -61,28 +64,9 @@ class Nautilus : ComponentActivity() {
 }
 
 @Composable
-fun TestView(){
-    val state = remember { mutableIntStateOf(0) }
-
-    TestView2(value = state.intValue) {
-        state.intValue++
-    }
-}
-
-@Composable
-fun TestView2(value: Int, incr: () -> Unit){
-    Column {
-        Text(text = value.toString())
-        OutlinedButton(onClick = incr) {
-            Text(text = "Incrémenter")
-        }
-    }
-}
-
-@Composable
 fun MainComponent(modifier: Modifier = Modifier, page: NautilusPage, pageSetter: (NautilusPage) -> Unit){
 
-    Column {
+    Column(modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         NavigationMenu(Modifier, page, pageSetter)
         PageComponent(modifier, page = page)
     }
@@ -109,7 +93,7 @@ fun PageComponent(modifier: Modifier, page: NautilusPage){
     when(page){
         NautilusPage.DIVES_LIST -> DiveListPlaceHolder()
         NautilusPage.CREATE_DIVE -> NewDive().DiveForm {}
-        else -> Text(text = "coucou")
+        NautilusPage.LOGIN -> LoginComponent(Modifier)
     }
 }
 
