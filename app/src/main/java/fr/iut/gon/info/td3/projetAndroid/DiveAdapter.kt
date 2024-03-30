@@ -10,7 +10,9 @@ class DiveAdapter(private val dives: List<FakeDive>) : RecyclerView.Adapter<Dive
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val diveDate: TextView = itemView.findViewById(R.id.dive_date)
-        val diveLevel: TextView = itemView.findViewById(R.id.dive_level)
+        val diveHourLocation: TextView = itemView.findViewById(R.id.dive_hour_location)
+        val diveDepth: TextView = itemView.findViewById(R.id.dive_depth)
+        val diveSpots: TextView = itemView.findViewById(R.id.dive_spots)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -25,6 +27,8 @@ class DiveAdapter(private val dives: List<FakeDive>) : RecyclerView.Adapter<Dive
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val dive = dives[position]
         holder.diveDate.text = dive.date
-        holder.diveLevel.text = dive.level
+        holder.diveHourLocation.text = "${dive.hour} à \"${dive.location}\""
+        holder.diveDepth.text = "${dive.depth}m de profondeur"
+        holder.diveSpots.text = "${dive.nbTakenSpots}/${dive.nbSpots}"
     }
 }
