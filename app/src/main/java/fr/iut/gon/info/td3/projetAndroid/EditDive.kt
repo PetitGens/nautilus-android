@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
-class NewDive {
+class EditDive {
     @Composable
     fun DiveForm(onSubmit: (DiveData) -> Unit) {
         var api =  ""
@@ -75,7 +75,7 @@ class NewDive {
                         value = time,
                         onValueChange = { time = it },
                         label = { Text("Heure") },
-                        )
+                    )
                 }
 
 
