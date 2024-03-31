@@ -115,7 +115,16 @@ fun DiveListPlaceHolder(){
 
 }
 
-
+fun fakeParticipantList(size: Int): MutableList<String> {
+    //random names
+    val firstNames = listOf("Julien", "Luc", "Guillaume", "Marie", "Sophie", "Jean", "Pierre", "Paul", "Jacques", "Michel", "Philippe", "Nicolas", "François", "Eric", "Laurent", "Christophe", "Patrick", "Sylvain", "Sébastien", "Thierry", "David", "Alexandre", "Olivier", "Vincent", "Bruno", "Antoine", "Arnaud", "Denis", "Frédéric", "Gilles", "Hervé", "Laurent", "Lionel", "Mathieu", "Maxime", "Romain", "Stéphane", "Thomas", "Yann", "Yves", "Alain", "Alexis", "André", "Bernard", "Cédric", "Christian", "Damien", "Daniel", "Didier", "Dominique", "Emmanuel", "Fabien", "Fabrice", "Georges", "Gérard", "Gilbert", "Grégory", "Guy", "Henri", "Hugues", "Jean-Paul", "Jérôme", "Joël", "Jonathan", "Joseph", "Julien", "Ludovic", "Marc", "Maurice", "Mickaël", "Noël", "Patrice", "Philippe", "Pierre", "René", "Roger", "Serge", "Sébastien", "Stéphane", "Thierry", "Thomas", "Vincent", "Xavier", "Yannick", "Yves", "Alain", "Alexandre", "Alexis", "André", "Antoine", "Arnaud", "Bernard", "Bruno", "Cédric", "Christian", "Christophe", "Claude", "Daniel", "David", "Denis", "Didier", "Dominique", "Emmanuel", "Eric", "Fabien", "Fabrice", "François", "Frédéric", "Georges", "Gérard", "Gilbert", "Gilles", "Grégory", "Guy", "Hervé", "Hugues", "Jacques", "Jean", "Jean-Paul", "Jérôme", "Joël", "Jonathan", "Joseph", "Laurent")
+    val lastNames = listOf("Martin", "Bernard", "Dubois", "Thomas", "Robert", "Richard", "Petit", "Durand", "Leroy", "Moreau", "Simon", "Laurent", "Lefebvre", "Michel", "Garcia", "David", "Bertrand", "Roux", "Vincent", "Fournier", "Morel", "Girard", "Garnier", "Caron", "Bonnet", "Menard", "Dupont", "Lambert", "Deschamps", "Rousseau", "Vidal", "Lemoine", "Picard", "Gaillard", "Philippe", "Leclerc", "Lefevre", "Perrin", "Guillaume", "Colin", "Meyer", "Marchand", "Dufour", "Meunier", "Blanc", "Gauthier", "Dumas", "Lopez", "Fernandez", "Dumont", "Chevalier", "Blanchard", "Huet", "Henry", "Bourgeois", "Masson", "Guerin", "Duval", "Roger", "Roche", "Denis", "Barbier", "Brun", "Marty", "Lecomte", "Benoit", "Rey", "Schmitt", "Leroux", "Collet", "Leger", "Boucher", "Tessier", "Benoist", "Guyot", "Perez", "Arnaud", "Julien", "Prevost", "Millet", "Lucas", "Fischer", "Coste", "Leclercq", "Payet", "Berger", "Lefort", "Daniel", "Leclerc", "Blanchet", "Le Gall", "Riviere", "Le Goff", "Baron", "Adam", "Perrot", "Brunet", "Goncalves", "Le Roux", "Leveque", "Boulanger", "Leveque", "Lebrun", "Marchal", "Weber", "Leblanc", "Renard", "Louis", "Guillot", "Moulin", "Poulain", "Leveque", "Lejeune")
+    val participants = mutableListOf<String>()
+    for (i in 1..size) {
+        participants.add("${firstNames.random()} ${lastNames.random()}")
+    }
+    return participants
+}
 @Composable
 fun FakeDiveList()
 {
@@ -143,7 +152,7 @@ fun FakeDiveList()
         val nbSpots = Random.nextInt(nbTakenSpots, 21)
         val isRegistered = Random.nextInt(1,5) == 1
 
-        randomDives.add(DiveDataclass(date=date, hour=hour, depth=depth, location=location, nbTakenSpots=nbTakenSpots, nbSpots=nbSpots, isRegistered = isRegistered))
+        randomDives.add(DiveDataclass(date=date, hour=hour, depth=depth, location=location, nbTakenSpots=nbTakenSpots, nbSpots=nbSpots, isRegistered = isRegistered, participants = fakeParticipantList(nbTakenSpots)))
     }
 
     DiveListView(dives = randomDives)
@@ -161,12 +170,13 @@ fun DiveListView(
         factory = { context ->
             RecyclerView(context).apply {
                 layoutManager = LinearLayoutManager(context)
-                adapter = DiveAdapter(dives)
+                adapter = DiveAdapter(dives,this.context)
 
             }
         }
     )
 }
+
 
 @Preview(showBackground = true)
 @Composable

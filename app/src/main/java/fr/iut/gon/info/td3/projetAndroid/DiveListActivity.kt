@@ -57,7 +57,7 @@ class DiveListActivity : AppCompatActivity() {
 
 
         // adapter
-        val adapter = DiveAdapter(combinedList)
+        val adapter = DiveAdapter(combinedList,this)
         recyclerView.adapter = adapter
     }
 
