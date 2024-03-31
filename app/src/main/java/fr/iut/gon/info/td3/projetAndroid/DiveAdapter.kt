@@ -5,11 +5,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import androidx.compose.ui.graphics.Color
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 
-class DiveAdapter(private val dives: List<FakeDive>) : RecyclerView.Adapter<DiveAdapter.ViewHolder>() {
+class DiveAdapter(private val dives: List<DIveDataclass>) : RecyclerView.Adapter<DiveAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val diveDate: TextView = itemView.findViewById(R.id.dive_date)

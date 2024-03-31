@@ -3,7 +3,6 @@ package fr.iut.gon.info.td3.projetAndroid
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -30,14 +29,14 @@ class DiveListActivity : AppCompatActivity() {
 
 
         val fakeDiveList = listOf(
-            FakeDive(date="MAUVAISE ACTIVITÉ", hour="9h", depth=50, location="Astan", nbTakenSpots=5, nbSpots=15),
-            FakeDive(date="MAUVAISE ACTIVITÉ", hour="18h", depth=20, location="L'ile Verte", nbTakenSpots=1, nbSpots=10),
-            FakeDive(date="MAUVAISE ACTIVITÉ", hour="9h", depth=40, location="Les Trepieds", nbTakenSpots=2, nbSpots=2),
-            FakeDive(date="MAUVAISE ACTIVITÉ", hour="18h", depth=20, location="L'lle Verte", nbTakenSpots=1, nbSpots=4),
-            FakeDive(date="MAUVAISE ACTIVITÉ", hour="18h", depth=20, location="L'ile Verte", nbTakenSpots=1, nbSpots=12),
-            FakeDive(date="MAUVAISE ACTIVITÉ", hour="18h", depth=20, location="Lille Verte", nbTakenSpots=1, nbSpots=4)
+            DIveDataclass(date="MAUVAISE ACTIVITÉ", hour="9h", depth=50, location="Astan", nbTakenSpots=5, nbSpots=15),
+            DIveDataclass(date="MAUVAISE ACTIVITÉ", hour="18h", depth=20, location="L'ile Verte", nbTakenSpots=1, nbSpots=10),
+            DIveDataclass(date="MAUVAISE ACTIVITÉ", hour="9h", depth=40, location="Les Trepieds", nbTakenSpots=2, nbSpots=2),
+            DIveDataclass(date="MAUVAISE ACTIVITÉ", hour="18h", depth=20, location="L'lle Verte", nbTakenSpots=1, nbSpots=4),
+            DIveDataclass(date="MAUVAISE ACTIVITÉ", hour="18h", depth=20, location="L'ile Verte", nbTakenSpots=1, nbSpots=12),
+            DIveDataclass(date="MAUVAISE ACTIVITÉ", hour="18h", depth=20, location="Lille Verte", nbTakenSpots=1, nbSpots=4)
         )
-        val randomDives = mutableListOf<FakeDive>()
+        val randomDives = mutableListOf<DIveDataclass>()
 
         for (i in 1..100) {
             val year = Random.nextInt(2024, 2031)
@@ -51,7 +50,7 @@ class DiveListActivity : AppCompatActivity() {
             val nbTakenSpots = Random.nextInt(1, 11)
             val nbSpots = Random.nextInt(nbTakenSpots, 21)
 
-            randomDives.add(FakeDive(date="MAUVAISE ACTIVITÉ", hour=hour, depth=depth, location=location, nbTakenSpots=nbTakenSpots, nbSpots=nbSpots))
+            randomDives.add(DIveDataclass(date="MAUVAISE ACTIVITÉ", hour=hour, depth=depth, location=location, nbTakenSpots=nbTakenSpots, nbSpots=nbSpots))
         }
 
         val combinedList = fakeDiveList + randomDives

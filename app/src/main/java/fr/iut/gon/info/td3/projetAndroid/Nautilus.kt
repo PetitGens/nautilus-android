@@ -1,17 +1,13 @@
 package fr.iut.gon.info.td3.projetAndroid
 
 import android.os.Bundle
-import android.view.ViewGroup
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -54,7 +50,7 @@ fun FakeDiveList()
         FakeDive(date="2026-12-30", hour="18h", depth=20, location="L'ile Verte", nbTakenSpots=1, nbSpots=12, isRegistered = true),
         FakeDive(date="2030-12-26", hour="18h", depth=20, location="Lille Verte", nbTakenSpots=1, nbSpots=4, isRegistered = true)
     )*/
-    val randomDives = mutableListOf<FakeDive>()
+    val randomDives = mutableListOf<DIveDataclass>()
 
     for (i in 1..100) {
         val year = Random.nextInt(2024, 2031)
@@ -69,7 +65,7 @@ fun FakeDiveList()
         val nbSpots = Random.nextInt(nbTakenSpots, 21)
         val isRegistered = Random.nextInt(1,5) == 1
 
-        randomDives.add(FakeDive(date=date, hour=hour, depth=depth, location=location, nbTakenSpots=nbTakenSpots, nbSpots=nbSpots, isRegistered = isRegistered))
+        randomDives.add(DIveDataclass(date=date, hour=hour, depth=depth, location=location, nbTakenSpots=nbTakenSpots, nbSpots=nbSpots, isRegistered = isRegistered))
     }
 
     DiveListView(dives = randomDives)
@@ -78,7 +74,7 @@ fun FakeDiveList()
 
 @Composable
 fun DiveListView(
-    dives: List<FakeDive>,
+    dives: List<DIveDataclass>,
     modifier: Modifier = Modifier
 ) {
     AndroidView(

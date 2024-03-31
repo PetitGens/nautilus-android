@@ -1,6 +1,6 @@
 package fr.iut.gon.info.td3.projetAndroid
 
-data class FakeDive(
+data class DIveDataclass(
     val date: String = "2024-01-01",
     val hour: String = "9h",
     val level: String = "PA",
