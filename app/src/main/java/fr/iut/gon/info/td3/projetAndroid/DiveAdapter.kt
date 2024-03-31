@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 
-class DiveAdapter(private val dives: List<DIveDataclass>) : RecyclerView.Adapter<DiveAdapter.ViewHolder>() {
+class DiveAdapter(private val dives: List<DiveDataclass>) : RecyclerView.Adapter<DiveAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val diveDate: TextView = itemView.findViewById(R.id.dive_date)

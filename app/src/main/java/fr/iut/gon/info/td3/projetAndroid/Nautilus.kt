@@ -50,7 +50,7 @@ fun FakeDiveList()
         FakeDive(date="2026-12-30", hour="18h", depth=20, location="L'ile Verte", nbTakenSpots=1, nbSpots=12, isRegistered = true),
         FakeDive(date="2030-12-26", hour="18h", depth=20, location="Lille Verte", nbTakenSpots=1, nbSpots=4, isRegistered = true)
     )*/
-    val randomDives = mutableListOf<DIveDataclass>()
+    val randomDives = mutableListOf<DiveDataclass>()
 
     for (i in 1..100) {
         val year = Random.nextInt(2024, 2031)
@@ -65,7 +65,7 @@ fun FakeDiveList()
         val nbSpots = Random.nextInt(nbTakenSpots, 21)
         val isRegistered = Random.nextInt(1,5) == 1
 
-        randomDives.add(DIveDataclass(date=date, hour=hour, depth=depth, location=location, nbTakenSpots=nbTakenSpots, nbSpots=nbSpots, isRegistered = isRegistered))
+        randomDives.add(DiveDataclass(date=date, hour=hour, depth=depth, location=location, nbTakenSpots=nbTakenSpots, nbSpots=nbSpots, isRegistered = isRegistered))
     }
 
     DiveListView(dives = randomDives)
@@ -74,8 +74,8 @@ fun FakeDiveList()
 
 @Composable
 fun DiveListView(
-    dives: List<DIveDataclass>,
-    modifier: Modifier = Modifier
+        dives: List<DiveDataclass>,
+        modifier: Modifier = Modifier
 ) {
     AndroidView(
         modifier = modifier,

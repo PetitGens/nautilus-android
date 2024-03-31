@@ -29,14 +29,14 @@ class DiveListActivity : AppCompatActivity() {
 
 
         val fakeDiveList = listOf(
-            DIveDataclass(date="MAUVAISE ACTIVITÉ", hour="9h", depth=50, location="Astan", nbTakenSpots=5, nbSpots=15),
-            DIveDataclass(date="MAUVAISE ACTIVITÉ", hour="18h", depth=20, location="L'ile Verte", nbTakenSpots=1, nbSpots=10),
-            DIveDataclass(date="MAUVAISE ACTIVITÉ", hour="9h", depth=40, location="Les Trepieds", nbTakenSpots=2, nbSpots=2),
-            DIveDataclass(date="MAUVAISE ACTIVITÉ", hour="18h", depth=20, location="L'lle Verte", nbTakenSpots=1, nbSpots=4),
-            DIveDataclass(date="MAUVAISE ACTIVITÉ", hour="18h", depth=20, location="L'ile Verte", nbTakenSpots=1, nbSpots=12),
-            DIveDataclass(date="MAUVAISE ACTIVITÉ", hour="18h", depth=20, location="Lille Verte", nbTakenSpots=1, nbSpots=4)
+            DiveDataclass(date="MAUVAISE ACTIVITÉ", hour="9h", depth=50, location="Astan", nbTakenSpots=5, nbSpots=15),
+            DiveDataclass(date="MAUVAISE ACTIVITÉ", hour="18h", depth=20, location="L'ile Verte", nbTakenSpots=1, nbSpots=10),
+            DiveDataclass(date="MAUVAISE ACTIVITÉ", hour="9h", depth=40, location="Les Trepieds", nbTakenSpots=2, nbSpots=2),
+            DiveDataclass(date="MAUVAISE ACTIVITÉ", hour="18h", depth=20, location="L'lle Verte", nbTakenSpots=1, nbSpots=4),
+            DiveDataclass(date="MAUVAISE ACTIVITÉ", hour="18h", depth=20, location="L'ile Verte", nbTakenSpots=1, nbSpots=12),
+            DiveDataclass(date="MAUVAISE ACTIVITÉ", hour="18h", depth=20, location="Lille Verte", nbTakenSpots=1, nbSpots=4)
         )
-        val randomDives = mutableListOf<DIveDataclass>()
+        val randomDives = mutableListOf<DiveDataclass>()
 
         for (i in 1..100) {
             val year = Random.nextInt(2024, 2031)
@@ -50,7 +50,7 @@ class DiveListActivity : AppCompatActivity() {
             val nbTakenSpots = Random.nextInt(1, 11)
             val nbSpots = Random.nextInt(nbTakenSpots, 21)
 
-            randomDives.add(DIveDataclass(date="MAUVAISE ACTIVITÉ", hour=hour, depth=depth, location=location, nbTakenSpots=nbTakenSpots, nbSpots=nbSpots))
+            randomDives.add(DiveDataclass(date="MAUVAISE ACTIVITÉ", hour=hour, depth=depth, location=location, nbTakenSpots=nbTakenSpots, nbSpots=nbSpots))
         }
 
         val combinedList = fakeDiveList + randomDives
