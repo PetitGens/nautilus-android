@@ -1,12 +1,14 @@
 package fr.iut.gon.info.td3.projetAndroid
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -21,6 +23,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -65,6 +68,9 @@ class Nautilus : ComponentActivity() {
                     }
                 }
             }
+        }
+        setContent {
+            FakeDiveList()
         }
     }
 }
@@ -149,12 +155,14 @@ fun DiveListView(
         dives: List<DiveDataclass>,
         modifier: Modifier = Modifier
 ) {
+
     AndroidView(
-        modifier = modifier,
+        modifier = modifier.fillMaxWidth(),
         factory = { context ->
             RecyclerView(context).apply {
                 layoutManager = LinearLayoutManager(context)
                 adapter = DiveAdapter(dives)
+
             }
         }
     )
