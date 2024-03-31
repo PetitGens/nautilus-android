@@ -3,6 +3,7 @@ package fr.iut.gon.info.td3.projetAndroid
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.compose.ui.graphics.Color
 import androidx.core.content.ContextCompat
@@ -15,6 +16,7 @@ class DiveAdapter(private val dives: List<FakeDive>) : RecyclerView.Adapter<Dive
         val diveHourLocation: TextView = itemView.findViewById(R.id.dive_hour_location)
         val diveDepth: TextView = itemView.findViewById(R.id.dive_depth)
         val diveSpots: TextView = itemView.findViewById(R.id.dive_spots)
+        val diveButton: Button = itemView.findViewById(R.id.dive_button)
 
     }
 
@@ -34,20 +36,26 @@ class DiveAdapter(private val dives: List<FakeDive>) : RecyclerView.Adapter<Dive
         holder.diveDepth.text = "${dive.depth}m de profondeur"
         holder.diveSpots.text = "${dive.nbTakenSpots}/${dive.nbSpots}"
 
+
+        val backgroundColor: Int
         if (dive.isRegistered) {
-            val backgroundColor = ContextCompat.getColor(holder.itemView.context, R.color.purple_200)
-            holder.itemView.setBackgroundColor(backgroundColor)
+            backgroundColor = ContextCompat.getColor(holder.itemView.context, R.color.purple_200)
+
         }
         else {
-            val backgroundColor = ContextCompat.getColor(holder.itemView.context, android.R.color.transparent)
-            holder.itemView.setBackgroundColor(backgroundColor)
+            backgroundColor = ContextCompat.getColor(holder.itemView.context, android.R.color.transparent)
+        }
+        val buttonText = if (dive.isRegistered) "Se désinscrire" else "S'inscrire"
+
+        holder.itemView.setBackgroundColor(backgroundColor)
+        holder.diveButton.text = buttonText
+
+
+        holder.diveButton.setOnClickListener {
+            dive.isRegistered = !dive.isRegistered
+            notifyItemChanged(position)
         }
 
-
-
-
-        holder.itemView.setOnClickListener {
-
-        }
     }
+
 }
