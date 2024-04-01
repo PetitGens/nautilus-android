@@ -24,6 +24,7 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -143,59 +144,62 @@ fun FakeDiveList()
 
         randomDives.add(DiveDataclass(date=date, hour=hour, depth=depth, location=location, nbTakenSpots=nbTakenSpots, nbSpots=nbSpots, isRegistered = isRegistered))
     }
-
-    //DiveListView(dives = randomDives)
+    val randomDivesSnapshot = SnapshotStateList<DiveDataclass>()
+    randomDivesSnapshot.addAll(randomDives)
+    DiveListView(dives = randomDivesSnapshot, adapter = DiveAdapter(randomDivesSnapshot))
 }
 
 
 @Composable
 fun DiveListView(
-        dives: SnapshotStateList<DiveDataclass>,
-        modifier: Modifier = Modifier
+    dives: SnapshotStateList<DiveDataclass>,
+    adapter: DiveAdapter,
+    modifier: Modifier = Modifier
 ) {
-    Text(text = dives.size.toString())
+    Text(text = dives.size.toString() + " plongées trouvées")
 
     AndroidView(
-        modifier = modifier,
+        modifier = modifier.fillMaxSize(),
         factory = { context ->
             RecyclerView(context).apply {
                 layoutManager = LinearLayoutManager(context)
-                adapter = DiveAdapter(dives)
+                this.adapter = adapter
             }
         }
     )
 }
 
 @Composable
-fun TestView(){
-    val dives : SnapshotStateList<DiveDataclass> = remember {
+fun TestView() {
+    val dives: SnapshotStateList<DiveDataclass> = remember {
         mutableStateListOf()
     }
-    
+
     val error = remember {
         mutableStateOf("")
     }
-    
+
+    val adapter = remember { DiveAdapter(dives) }
+
     OutlinedButton(onClick = {
-        Thread{
-            try{
+        Thread {
+            try {
                 val fetchedDives = APICall.fetchDives()
                 dives.clear()
                 dives.addAll(fetchedDives)
+                adapter.notifyDataSetChanged()
                 error.value = ""
-            }
-            catch (ex: Exception){
+            } catch (ex: Exception) {
                 error.value = ex.message.toString()
             }
-            
         }.start()
     }) {
         Text(text = "Fetch dives")
     }
 
     Text(text = error.value, color = Color.Red)
-    
-    DiveListView(dives = dives)
+
+    DiveListView(dives = dives, adapter = adapter)
 }
 
 @Preview(showBackground = true)
