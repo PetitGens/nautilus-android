@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 
-class DiveAdapter(private val dives: List<DiveDataclass>) : RecyclerView.Adapter<DiveAdapter.ViewHolder>() {
+class DiveAdapter(private var dives: List<DiveDataclass>) : RecyclerView.Adapter<DiveAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val diveDate: TextView = itemView.findViewById(R.id.dive_date)
@@ -17,6 +17,10 @@ class DiveAdapter(private val dives: List<DiveDataclass>) : RecyclerView.Adapter
         val diveSpots: TextView = itemView.findViewById(R.id.dive_spots)
         val diveButton: Button = itemView.findViewById(R.id.dive_button)
 
+    }
+
+    fun setDives(dives: List<DiveDataclass>) {
+        this.dives = dives
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

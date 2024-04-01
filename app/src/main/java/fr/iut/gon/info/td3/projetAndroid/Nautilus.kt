@@ -54,7 +54,7 @@ class Nautilus : ComponentActivity() {
         val divesObserver = Observer<List<DiveDataclass>> {
             divesSnapshot?.clear()
             divesSnapshot?.addAll(it)
-            adapter = DiveAdapter(it)
+            adapter.setDives(it)
             adapter!!.notifyDataSetChanged()
             Log.d("DEBUG", "updating dives")
         }
