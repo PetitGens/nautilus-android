@@ -17,10 +17,13 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -96,11 +99,12 @@ fun NavigationMenu(modifier: Modifier, page: NautilusPage, pageSetter: (Nautilus
 
 @Composable
 fun PageComponent(modifier: Modifier, page: NautilusPage){
-    when(page){
+    TestView()
+    /*when(page){
         NautilusPage.DIVES_LIST -> DiveListPlaceHolder()
         NautilusPage.CREATE_DIVE -> NewDive().DiveForm {}
         NautilusPage.LOGIN -> LoginComponent(Modifier)
-    }
+    }*/
 }
 
 @Composable
@@ -140,15 +144,17 @@ fun FakeDiveList()
         randomDives.add(DiveDataclass(date=date, hour=hour, depth=depth, location=location, nbTakenSpots=nbTakenSpots, nbSpots=nbSpots, isRegistered = isRegistered))
     }
 
-    DiveListView(dives = randomDives)
+    //DiveListView(dives = randomDives)
 }
 
 
 @Composable
 fun DiveListView(
-        dives: List<DiveDataclass>,
+        dives: SnapshotStateList<DiveDataclass>,
         modifier: Modifier = Modifier
 ) {
+    Text(text = dives.size.toString())
+
     AndroidView(
         modifier = modifier,
         factory = { context ->
@@ -158,6 +164,38 @@ fun DiveListView(
             }
         }
     )
+}
+
+@Composable
+fun TestView(){
+    val dives : SnapshotStateList<DiveDataclass> = remember {
+        mutableStateListOf()
+    }
+    
+    val error = remember {
+        mutableStateOf("")
+    }
+    
+    OutlinedButton(onClick = {
+        Thread{
+            try{
+                val fetchedDives = APICall.fetchDives()
+                dives.clear()
+                dives.addAll(fetchedDives)
+                error.value = ""
+            }
+            catch (ex: Exception){
+                error.value = ex.message.toString()
+            }
+            
+        }.start()
+    }) {
+        Text(text = "Fetch dives")
+    }
+
+    Text(text = error.value, color = Color.Red)
+    
+    DiveListView(dives = dives)
 }
 
 @Preview(showBackground = true)

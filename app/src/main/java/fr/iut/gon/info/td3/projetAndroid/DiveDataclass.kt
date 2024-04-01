@@ -10,5 +10,6 @@ data class DiveDataclass(
     val nbTakenSpots: Int = 1,
     val dive: Unit? = null,
     var isRegistered: Boolean = false,
-    val participants: MutableList<String> = mutableListOf()
+    val participants: MutableList<String> = mutableListOf(),
+    val id: Int = -1
 )
