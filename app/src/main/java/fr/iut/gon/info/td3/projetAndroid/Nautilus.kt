@@ -11,35 +11,27 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalNavigationDrawer
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
-import com.google.android.material.internal.NavigationMenu
-import fr.iut.gon.info.td3.projetAndroid.ui.theme.ProjetAndroidTheme
-import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import fr.iut.gon.info.td3.projetAndroid.ui.theme.ProjetAndroidTheme
@@ -119,14 +111,14 @@ fun NavigationMenu(
     pageSetter: (NautilusPage) -> Unit,
     onCloseMenu: () -> Unit,
 ){
-    Column(modifier = modifier.background(color = Color.Black).fillMaxHeight()) {
-        TextButton(onClick = {
+    Column(modifier = modifier.background(color = Color.Gray).fillMaxHeight()) {
+        TextButton(enabled = page != NautilusPage.DIVES_LIST, onClick = {
             pageSetter(NautilusPage.DIVES_LIST)
             onCloseMenu()
         }) {
             Text(text = "Liste des plongées")
         }
-        TextButton(onClick = {
+        TextButton(enabled = page != NautilusPage.CREATE_DIVE, onClick = {
             pageSetter(NautilusPage.CREATE_DIVE)
             onCloseMenu()
         }) {
