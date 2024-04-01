@@ -15,7 +15,7 @@ class APICall {
             connection.connect()
 
             if(connection.responseCode != 200){
-                throw RequestFailureException()
+                throw RequestFailureException("Received code " + connection.responseCode.toString())
             }
 
             val jsonObjects = JSONArray(fetchAllDataFromConnection(connection))

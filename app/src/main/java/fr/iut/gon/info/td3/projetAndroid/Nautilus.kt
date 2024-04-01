@@ -1,13 +1,13 @@
 package fr.iut.gon.info.td3.projetAndroid
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
@@ -16,34 +16,33 @@ import androidx.compose.material3.TextButton
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import com.google.android.material.internal.NavigationMenu
 import fr.iut.gon.info.td3.projetAndroid.ui.theme.ProjetAndroidTheme
-import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import fr.iut.gon.info.td3.projetAndroid.ui.theme.ProjetAndroidTheme
 import kotlin.random.Random
 
 class Nautilus : ComponentActivity() {
     private val navigationViewModel : NavigationViewModel by viewModels()
+    private val divesViewModel : DivesViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         var pageState : MutableState<NautilusPage?>? = null
+        var divesSnapshot: SnapshotStateList<DiveDataclass>? = null
+        var adapter = DiveAdapter(emptyList())
+
         val pageSetter : (NautilusPage) -> (Unit) = {
             navigationViewModel.currentPage.value = it
         }
@@ -51,7 +50,17 @@ class Nautilus : ComponentActivity() {
         val pageObserver = Observer<NautilusPage>{
             pageState?.value = it
         }
+
+        val divesObserver = Observer<List<DiveDataclass>> {
+            divesSnapshot?.clear()
+            divesSnapshot?.addAll(it)
+            adapter = DiveAdapter(it)
+            adapter!!.notifyDataSetChanged()
+            Log.d("DEBUG", "updating dives")
+        }
+
         navigationViewModel.currentPage.observe(this, pageObserver)
+        divesViewModel.divesLiveData().observe(this, divesObserver)
 
         setContent {
             ProjetAndroidTheme {
@@ -64,8 +73,23 @@ class Nautilus : ComponentActivity() {
                         mutableStateOf(navigationViewModel.currentPage.value)
                     }
 
-                    if (pageState!!.value != null) {
-                        MainComponent(page = pageState!!.value!!, pageSetter = pageSetter)
+                    //adapter = remember {DiveAdapter(divesViewModel.getDives())}
+
+                    divesSnapshot = remember {
+                        mutableStateListOf<DiveDataclass>().apply {
+                            this.addAll(divesViewModel.getDives())
+                        }
+                    }
+
+                    if (pageState != null && pageState!!.value != null && adapter != null) {
+                        MainComponent(
+                            page = pageState!!.value!!,
+                            pageSetter = pageSetter,
+                            dives = divesSnapshot!!,
+                            adapter = adapter!!
+                        ){
+                            divesViewModel.fetchDives()
+                        }
                     }
                 }
             }
@@ -74,11 +98,18 @@ class Nautilus : ComponentActivity() {
 }
 
 @Composable
-fun MainComponent(modifier: Modifier = Modifier, page: NautilusPage, pageSetter: (NautilusPage) -> Unit){
+fun MainComponent(
+    modifier: Modifier = Modifier,
+    page: NautilusPage,
+    adapter: DiveAdapter,
+    pageSetter: (NautilusPage) -> Unit,
+    dives: SnapshotStateList<DiveDataclass>,
+    onFetchDives: () -> Unit
+){
 
     Column(modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         NavigationMenu(Modifier, page, pageSetter)
-        PageComponent(modifier, page = page)
+        PageComponent(modifier, page = page, adapter, dives, onFetchDives)
     }
 }
 
@@ -99,8 +130,14 @@ fun NavigationMenu(modifier: Modifier, page: NautilusPage, pageSetter: (Nautilus
 }
 
 @Composable
-fun PageComponent(modifier: Modifier, page: NautilusPage){
-    TestView()
+fun PageComponent(
+    modifier: Modifier,
+    page: NautilusPage,
+    adapter: DiveAdapter,
+    dives: SnapshotStateList<DiveDataclass>,
+    onFetchDives: () -> Unit
+){
+    TestView(adapter, dives, onFetchDives)
     /*when(page){
         NautilusPage.DIVES_LIST -> DiveListPlaceHolder()
         NautilusPage.CREATE_DIVE -> NewDive().DiveForm {}
@@ -146,13 +183,12 @@ fun FakeDiveList()
     }
     val randomDivesSnapshot = SnapshotStateList<DiveDataclass>()
     randomDivesSnapshot.addAll(randomDives)
-    DiveListView(dives = randomDivesSnapshot, adapter = DiveAdapter(randomDivesSnapshot))
+    DiveList(dives = randomDivesSnapshot, adapter = DiveAdapter(randomDivesSnapshot))
 }
 
-
 @Composable
-fun DiveListView(
-    dives: SnapshotStateList<DiveDataclass>,
+fun DiveList(
+    dives: List<DiveDataclass>,
     adapter: DiveAdapter,
     modifier: Modifier = Modifier
 ) {
@@ -170,26 +206,17 @@ fun DiveListView(
 }
 
 @Composable
-fun TestView() {
-    val dives: SnapshotStateList<DiveDataclass> = remember {
-        mutableStateListOf()
-    }
-
+fun TestView(adapter: DiveAdapter, dives: List<DiveDataclass>, onFetchDives: () -> Unit) {
     val error = remember {
         mutableStateOf("")
     }
 
-    val adapter = remember { DiveAdapter(dives) }
-
     OutlinedButton(onClick = {
-        Thread {
-            try {
-                val fetchedDives = APICall.fetchDives()
-                dives.clear()
-                dives.addAll(fetchedDives)
-                adapter.notifyDataSetChanged()
+        Thread{
+            try{
+                onFetchDives()
                 error.value = ""
-            } catch (ex: Exception) {
+            } catch (ex: Exception){
                 error.value = ex.message.toString()
             }
         }.start()
@@ -199,15 +226,13 @@ fun TestView() {
 
     Text(text = error.value, color = Color.Red)
 
-    DiveListView(dives = dives, adapter = adapter)
+    DiveList(dives = dives, adapter = adapter)
 }
 
 @Preview(showBackground = true)
 @Composable
 fun CreateDivePreview(){
     ProjetAndroidTheme {
-        MainComponent(page = NautilusPage.CREATE_DIVE){
-
-        }
+        //MainComponent(page = NautilusPage.CREATE_DIVE, adapter = DiveAdapter(mutableListOf()), pageSetter = {}, null, onFetchDives = {})
     }
 }
