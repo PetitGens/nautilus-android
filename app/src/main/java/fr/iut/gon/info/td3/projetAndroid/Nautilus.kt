@@ -5,31 +5,41 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.Observer
-import fr.iut.gon.info.td3.projetAndroid.ui.theme.ProjetAndroidTheme
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import fr.iut.gon.info.td3.projetAndroid.ui.theme.ProjetAndroidTheme
+import kotlinx.coroutines.launch
 import kotlin.random.Random
 
 class Nautilus : ComponentActivity() {
@@ -106,25 +116,58 @@ fun MainComponent(
     dives: SnapshotStateList<DiveDataclass>,
     onFetchDives: () -> Unit
 ){
-
-    Column(modifier, horizontalAlignment = Alignment.CenterHorizontally) {
-        NavigationMenu(Modifier, page, pageSetter)
-        PageComponent(modifier, page = page, adapter, dives, onFetchDives)
+    val menuState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val couroutineScope = rememberCoroutineScope()
+    ModalNavigationDrawer(drawerContent = {NavigationMenu(
+        modifier = Modifier,
+        page = page,
+        pageSetter = pageSetter,
+        onCloseMenu = {
+            couroutineScope.launch {
+                menuState.close()
+            }
+        }
+    )}, drawerState = menuState) {
+        Column(modifier, horizontalAlignment = Alignment.CenterHorizontally) {
+            Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.fillMaxWidth()) {
+                IconButton(onClick = { couroutineScope.launch {
+                    menuState.open()
+                } }) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_menu),
+                        contentDescription = "ouvrir menu-glissant"
+                    )
+                }
+            }
+            PageComponent(modifier, page = page, adapter, dives, onFetchDives)
+        }
     }
 }
 
 @Composable
-fun NavigationMenu(modifier: Modifier, page: NautilusPage, pageSetter: (NautilusPage) -> Unit){
-    Row {
+fun NavigationMenu(
+    modifier: Modifier,
+    page: NautilusPage,
+    pageSetter: (NautilusPage) -> Unit,
+    onCloseMenu: () -> Unit,
+){
+    Column(modifier = modifier.background(color = Color.Black).fillMaxHeight()) {
         TextButton(onClick = {
             pageSetter(NautilusPage.DIVES_LIST)
+            onCloseMenu()
         }) {
             Text(text = "Liste des plongées")
         }
         TextButton(onClick = {
             pageSetter(NautilusPage.CREATE_DIVE)
+            onCloseMenu()
         }) {
             Text(text = "Création de plongée")
+        }
+        TextButton(onClick = {
+            onCloseMenu()
+        }) {
+            Text(text = "Déconnexion")
         }
     }
 }
@@ -137,12 +180,11 @@ fun PageComponent(
     dives: SnapshotStateList<DiveDataclass>,
     onFetchDives: () -> Unit
 ){
-    TestView(adapter, dives, onFetchDives)
-    /*when(page){
-        NautilusPage.DIVES_LIST -> DiveListPlaceHolder()
+    when(page){
+        NautilusPage.DIVES_LIST -> DiveListView(adapter, dives, onFetchDives)
         NautilusPage.CREATE_DIVE -> NewDive().DiveForm {}
         NautilusPage.LOGIN -> LoginComponent(Modifier)
-    }*/
+    }
 }
 
 @Composable
@@ -206,7 +248,7 @@ fun DiveList(
 }
 
 @Composable
-fun TestView(adapter: DiveAdapter, dives: List<DiveDataclass>, onFetchDives: () -> Unit) {
+fun DiveListView(adapter: DiveAdapter, dives: List<DiveDataclass>, onFetchDives: () -> Unit) {
     val error = remember {
         mutableStateOf("")
     }
