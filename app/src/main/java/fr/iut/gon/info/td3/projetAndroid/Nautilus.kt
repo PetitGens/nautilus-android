@@ -151,14 +151,14 @@ fun NavigationMenu(
     pageSetter: (NautilusPage) -> Unit,
     onCloseMenu: () -> Unit,
 ){
-    Column(modifier = modifier.background(color = Color.Black).fillMaxHeight()) {
-        TextButton(onClick = {
+    Column(modifier = modifier.background(color = Color.Gray).fillMaxHeight()) {
+        TextButton(enabled = page != NautilusPage.DIVES_LIST, onClick = {
             pageSetter(NautilusPage.DIVES_LIST)
             onCloseMenu()
         }) {
             Text(text = "Liste des plongées")
         }
-        TextButton(onClick = {
+        TextButton(enabled = page != NautilusPage.CREATE_DIVE, onClick = {
             pageSetter(NautilusPage.CREATE_DIVE)
             onCloseMenu()
         }) {
