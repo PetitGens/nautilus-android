@@ -1,5 +1,7 @@
 package fr.iut.gon.info.td3.projetAndroid
 
+import android.app.AlertDialog
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,7 +10,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 
-class DiveAdapter(private val dives: List<DiveDataclass>) : RecyclerView.Adapter<DiveAdapter.ViewHolder>() {
+class DiveAdapter(private val dives: List<DiveDataclass>, private val context: Context) : RecyclerView.Adapter<DiveAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val diveDate: TextView = itemView.findViewById(R.id.dive_date)
@@ -16,7 +18,7 @@ class DiveAdapter(private val dives: List<DiveDataclass>) : RecyclerView.Adapter
         val diveDepth: TextView = itemView.findViewById(R.id.dive_depth)
         val diveSpots: TextView = itemView.findViewById(R.id.dive_spots)
         val diveButton: Button = itemView.findViewById(R.id.dive_button)
-
+        val diveParticipantsButton: TextView = itemView.findViewById(R.id.dive_participant_button)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -55,6 +57,21 @@ class DiveAdapter(private val dives: List<DiveDataclass>) : RecyclerView.Adapter
             notifyItemChanged(position)
         }
 
+        holder.diveParticipantsButton.setOnClickListener {
+            showParticipantsList(dive)
+        }
+
+    }
+    private fun showParticipantsList(dive: DiveDataclass) {
+        val participants = dive.participants
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle("Participants de la plongée du ${dive.date} - ${dive.hour} à ${dive.location}")
+
+        val participantsArray = participants.toTypedArray()
+        builder.setItems(participantsArray) { _, _ ->}
+
+        val dialog = builder.create()
+        dialog.show()
     }
 
 }
