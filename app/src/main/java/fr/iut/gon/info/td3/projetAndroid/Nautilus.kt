@@ -73,9 +73,6 @@ class Nautilus : ComponentActivity() {
                 }
             }
         }
-        setContent {
-            FakeDiveList()
-        }
     }
 }
 
